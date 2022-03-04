@@ -1,6 +1,6 @@
 #!/usr/local/bin/sbcl --script
 
-(defun predicate-travelling-towards-neighbour(sat neighbour)
+(defun determine-if-travelling-towards-eachother(sat neighbour)
     (if (and 
         (eq (signum sat) 1) 
         (eq (signum neighbour) -1)
@@ -19,7 +19,7 @@
     )
 )
 
-(defun survivor-list(arr survivors)
+(defun recalculate-survivors(arr survivors)
     (if (eq (determine-survivor (car arr) (car (cdr arr))) NIL)
         survivors
         (append (determine-survivor (car arr) (car (cdr arr))) survivors)
@@ -33,10 +33,10 @@
     )
 )
 
-(defun calculate-surviving-satellite-lists(arr survivors)
-    (if (eq (predicate-travelling-towards-neighbour (car arr) (car (cdr arr))) NIL)
+(defun evaluate-satellites(arr survivors)
+    (if (eq (determine-if-travelling-towards-eachother (car arr) (car (cdr arr))) NIL)
         (step-through-sats (cdr arr) (append (list (car arr)) survivors) NIL)
-        (step-through-sats (cdr (cdr arr)) (survivor-list arr survivors) T)
+        (step-through-sats (cdr (cdr arr)) (recalculate-survivors arr survivors) T)
     )
 )
 
@@ -45,7 +45,7 @@
         (should-halt collision survivors)
         (if (eq (length arr) 1)
             (should-halt collision (append arr survivors))
-            (calculate-surviving-satellite-lists arr survivors)
+            (evaluate-satellites arr survivors)
         )
     )
 )
