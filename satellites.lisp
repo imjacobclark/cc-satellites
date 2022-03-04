@@ -1,11 +1,10 @@
 #!/usr/local/bin/sbcl --script
 
 (defun predicate-travelling-towards-neighbour(sat neighbour)
-    (if 
-        (and 
-            (eq (signum sat) 1) 
-            (eq (signum neighbour) -1)
-        ) 
+    (if (and 
+        (eq (signum sat) 1) 
+        (eq (signum neighbour) -1)
+    ) 
     T 
     NIL
 ))
@@ -16,7 +15,8 @@
         (if (> (abs sat) (abs neighbour))
             (list sat)
             (list neighbour)
-        ))
+        )
+    )
 )
 
 (defun survivor-list(arr survivors)
@@ -26,40 +26,37 @@
     )
 )
 
-(defun satellite-list(arr)
-    (cdr (cdr arr))
-)
-
-(defun predicate-collide-revaluate(collision survivors)
+(defun should-halt(collision survivors)
     (if (eq collision T)
         (step-through-sats (reverse survivors) '() NIL)
         (reverse survivors)
     )
 )
 
+(defun calculate-surviving-satellite-lists(arr survivors)
+    (if (eq (predicate-travelling-towards-neighbour (car arr) (car (cdr arr))) NIL)
+        (step-through-sats (cdr arr) (append (list (car arr)) survivors) NIL)
+        (step-through-sats (cdr (cdr arr)) (survivor-list arr survivors) T)
+    )
+)
+
 (defun step-through-sats(arr survivors collision)
     (if (eq arr NIL)
-        (predicate-collide-revaluate collision survivors)
+        (should-halt collision survivors)
         (if (eq (length arr) 1)
-            (predicate-collide-revaluate collision (append arr survivors))
-            (if (eq (predicate-travelling-towards-neighbour (car arr) (car (cdr arr))) NIL)
-                (step-through-sats (cdr arr) (append (list (car arr)) survivors) NIL)
-                (step-through-sats (satellite-list arr) (survivor-list arr survivors) T)
-            )
+            (should-halt collision (append arr survivors))
+            (calculate-surviving-satellite-lists arr survivors)
         )
     )
 )
 
 (defun compute-collisions(arr i sats)
-    (if 
-        (eq (length (cdr arr)) 0)
-            sats
-            (step-through-sats arr '() NIL)
+    (if (eq (length (cdr arr)) 0)
+        sats
+        (step-through-sats arr '() NIL)
 ))
 
-(defun main(sats)
-    (compute-collisions sats 0 '())
-)
+(defun main(sats) (compute-collisions sats 0 '()))
 
 (write 
     (main 
@@ -82,15 +79,12 @@
 
 (write-line "")
 
-
 (write 
     (main 
        '(1 1 -2 -2)
 ))
 
 (write-line "")
-
-
 
 (write 
     (main 

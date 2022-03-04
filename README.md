@@ -20,3 +20,5 @@ chmod +x satellites.lisp
 (10)
 NIL
 ```
+
+![](./architecture.png)
