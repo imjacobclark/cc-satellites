@@ -1,5 +1,13 @@
 #!/usr/local/bin/sbcl --script
 
+(defun dbg(id x)
+    (write "Input: ")
+    (write id)
+    (write " - Result: ")
+    (write x)
+    (write-line "")
+)
+
 (defun determine-if-travelling-towards-eachother(sat neighbour)
     (if (and 
         (eq (signum sat) 1) 
@@ -29,7 +37,7 @@
 (defun should-halt(collision survivors)
     (if (eq collision T)
         (step-through-sats (reverse survivors) '() NIL)
-        (reverse survivors)
+        survivors
     )
 )
 
@@ -53,49 +61,61 @@
 (defun compute-collisions(arr i sats)
     (if (eq (length (cdr arr)) 0)
         sats
-        (step-through-sats arr '() NIL)
+        (reverse (step-through-sats arr '() NIL))
 ))
 
 (defun main(sats) (compute-collisions sats 0 '()))
 
-(write 
+(dbg 
+    '(-3 1 1 -2 3 -2)
     (main 
        '(-3 1 1 -2 3 -2)
 ))
 
-(write-line "")
-
-(write 
+(dbg 
+    '(-2 -1 1 2)
     (main 
        '(-2 -1 1 2)
 ))
 
-(write-line "")
-
-(write 
+(dbg 
+    '(-2 1 1 -2)
     (main 
        '(-2 1 1 -2)
 ))
 
-(write-line "")
-
-(write 
+(dbg 
+    '(1 1 -2 -2)
     (main 
        '(1 1 -2 -2)
 ))
 
-(write-line "")
-
-(write 
+(dbg 
+    '(10 2 -5)
     (main 
        '(10 2 -5)
 ))
 
-(write-line "")
-
-(write 
+(dbg 
+    '(8 -8)
     (main 
        '(8 -8)
 ))
 
-(write-line "")
+(dbg
+    '(-4 2 -3 3 4 -1 2 -2 3 -4)
+    (main 
+       '(-4 2 -3 3 4 -1 2 -2 3 -4)
+))
+
+(dbg
+    '(5 -2 -5 -2 3 -1 -1 3 -4)
+    (main 
+       '(5 -2 -5 -2 3 -1 -1 3 -4)
+))
+
+(dbg
+    '(1 -1 1 1 -1 -1 1 -1)
+    (main 
+       '(1 -1 1 1 -1 -1 1 -1)
+))
