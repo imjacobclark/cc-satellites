@@ -58,13 +58,13 @@
     )
 )
 
-(defun compute-collisions(arr i sats)
+(defun compute-collisions(arr sats)
     (if (eq (length (cdr arr)) 0)
         sats
-        (reverse (step-through-sats arr '() NIL))
+        (reverse (step-through-sats arr sats NIL))
 ))
 
-(defun main(sats) (compute-collisions sats 0 '()))
+(defun main(sats) (compute-collisions sats '()))
 
 (dbg 
     '(-3 1 1 -2 3 -2)
