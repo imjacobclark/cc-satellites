@@ -25,3 +25,21 @@ chmod +x satellites.lisp
 ```
 
 ![](./architecture.png)
+
+## Problem
+
+Consider a list of satellites moving through 2D space: `[-2,-1, 1,-2]`
+
+The absolute value of each satellite represents its size, and the sign of the satellite represents its direction of travel (- being left, + being right). If two satellites meet, the smaller satellite is destroyed. If meeting satellites are the same size, both are destroyed. All satellites are moving at the same speed.
+
+Given this information, the challenge is to write an algorithm capable of determining the final state of these sample problems after all collisions have taken place:
+
+```
+[-4,2,-3,3,4,-1,2,-2,3,-4]
+[5,-2,-5,-2,3,-1,-1,3,-4]
+[1,-1,1,1,-1,-1,1,-1]
+```
+
+Example:
+For the following list of satellites: `[-3, 1, 1,-2, 3,-2]`
+The expected output after all collisions is: `[-3,-2, 3]`
